@@ -1,0 +1,62 @@
+# ========================
+# Node.js
+# ========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ========================
+# Environment variables
+# ========================
+.env
+.env.local
+.env.development
+.env.production
+
+# ========================
+# Logs
+# ========================
+logs/
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ========================
+# OS generated files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# IDE / Editor files
+# ========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ========================
+# React / Frontend build
+# ========================
+agriconnect-frontend/build/
+agriconnect-frontend/dist/
+agriconnect-frontend/out/
+
+# ========================
+# Testing / Coverage
+# ========================
+coverage/
+*.lcov
+
+# ========================
+# Temporary / Misc
+# ========================
+*.tmp
+*.swp
+*.bak
