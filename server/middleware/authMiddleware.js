@@ -10,11 +10,17 @@ export const protect = async (req, res, next) => {
     }
 
     if (!token) {
-      return res.status(401).json({ message: "Not authorized - No token" });
+      return res.status(401).json({ message: "Not authorized - No token provided" });
     }
 
-    // Decode token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Verify token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      console.error("Token verification failed:", err.message);
+      return res.status(401).json({ message: "Not authorized - Invalid token", error: err.message });
+    }
 
     // Attach user to request
     const user = await User.findById(decoded.id || decoded._id).select("-password");
@@ -25,8 +31,8 @@ export const protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.error("Auth error:", error.message);
-    res.status(401).json({ message: "Not authorized - Invalid token" });
+    console.error("Auth middleware error:", error.message);
+    res.status(401).json({ message: "Not authorized", error: error.message });
   }
 };
 
