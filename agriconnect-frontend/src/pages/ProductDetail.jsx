@@ -74,7 +74,18 @@ export default function ProductDetail() {
       <div className="bg-white rounded-lg shadow p-6 grid md:grid-cols-3 gap-6">
         <div className="md:col-span-1">
           {product.imageUrl ? (
-            <img src={product.imageUrl} alt={product.name} className="w-full h-64 object-cover rounded" />
+            <img
+              src={
+                product.imageUrl
+                  ? `https://project-j002.onrender.com${product.imageUrl}`
+                  : "https://project-j002.onrender.com/images/default-product.jpg"
+              }
+              alt={product.name}
+              className="w-full h-64 object-cover rounded"
+              onError={(e) => {
+                e.target.src = "https://project-j002.onrender.com/images/default-product.jpg";
+              }}
+            />
           ) : (
             <div className="w-full h-64 bg-gray-100 flex items-center justify-center rounded">No Image</div>
           )}
