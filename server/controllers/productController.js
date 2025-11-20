@@ -1,5 +1,5 @@
 // controllers/productController.js   ← FINAL 100% WORKING
-import Product from "../models/Product.js";
+import Product from "../models/product.js";
 import asyncHandler from "express-async-handler";
 
 // @desc    Create new product
