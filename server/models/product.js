@@ -1,26 +1,49 @@
+// models/Product.js
 import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: { type: String },
-  category: { type: String },
-  pricePerKg: { type: Number, required: true },
-  quantity: { type: Number, required: true },
-  imageUrl: { type: String },
-  farmerId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  available: { type: Boolean, default: true },
-  dateListed: { type: Date, default: Date.now },
-  views: { type: Number, default: 0 },
+const productSchema = mongoose.Schema({
+  farmerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    default: "",
+  },
+  pricePerKg: {
+    type: Number,
+    required: true,
+  },
+  quantityAvailable: {           // ← THIS IS WHAT YOUR FORM SENDS
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  image: {
+    type: String,
+    default: "/uploads/default.jpg",
+  },
+  views: {
+    type: Number,
+    default: 0,
+  },
   reviews: [
     {
-      reviewerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      name: String,
+      user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       rating: Number,
       comment: String,
-      date: { type: Date, default: Date.now }
-    }
+      createdAt: { type: Date, default: Date.now },
+    },
   ],
-  averageRating: { type: Number, default: 0 }
-}, { timestamps: true });
+}, {
+  timestamps: true,
+});
 
-export default mongoose.models.Product || mongoose.model("Product", productSchema);
+const Product = mongoose.model("Product", productSchema);
+
+export default Product;

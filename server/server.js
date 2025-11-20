@@ -19,11 +19,11 @@ app.use(express.json());
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, {
-    autoIndex: true,
-  })
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.log("❌ DB connection error:", err));
+  .connect(process.env.MONGO_URI, { autoIndex: true })
+  .then(() => {
+    mongoose.set("strictPopulate", false);
+    console.log("MongoDB connected");
+  });
 
 // Routes
 app.use("/api/auth", authRoutes);

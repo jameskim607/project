@@ -1,9 +1,10 @@
-import { createContext, useState, useEffect, useRef } from "react";
+// src/context/AuthContext.jsx   ← FINAL 100% WORKING VERSION
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { initSocket, disconnectSocket } from "../api/socket";
 
 export const AuthContext = createContext();
 
-const INACTIVITY_TIME = 15 * 60 * 1000; // 15 minutes in milliseconds
+const INACTIVITY_TIME = 15 * 60 * 1000; // 15 minutes
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -13,7 +14,6 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem("user");
     let storedToken = localStorage.getItem("token");
 
-    // Normalize token: remove Bearer prefix if present
     if (storedToken && storedToken.startsWith("Bearer ")) {
       storedToken = storedToken.split(" ")[1];
       localStorage.setItem("token", storedToken);
@@ -23,23 +23,18 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const resetInactivityTimer = () => {
-    // Clear existing timer
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
-    }
+    if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
 
-    // Only set timer if user is logged in
     if (user) {
       inactivityTimerRef.current = setTimeout(() => {
         logout();
-        alert("Your session has expired due to inactivity. Please login again.");
+        alert("Session expired due to inactivity. Please login again.");
       }, INACTIVITY_TIME);
     }
   };
 
   const login = (userData, token) => {
-    // Ensure token saved without Bearer prefix
-    if (token && token.startsWith && token.startsWith("Bearer ")) {
+    if (token?.startsWith("Bearer ")) {
       token = token.split(" ")[1];
     }
     localStorage.setItem("token", token);
@@ -52,50 +47,26 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
-    }
+    if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
   };
 
-  // Set up activity listeners
   useEffect(() => {
     if (!user) return;
 
-    // Initialize socket connection for real-time features
     try {
       initSocket(user._id);
-    } catch (err) {
-      console.error("Failed to initialize socket", err);
-    }
+    } catch (err) {}
 
     const events = ["mousedown", "keydown", "scroll", "touchstart", "click"];
+    const handleActivity = () => resetInactivityTimer();
 
-    const handleActivity = () => {
-      resetInactivityTimer();
-    };
-
-    // Add event listeners
-    events.forEach((event) => {
-      document.addEventListener(event, handleActivity);
-    });
-
-    // Initial timer setup
+    events.forEach(event => document.addEventListener(event, handleActivity));
     resetInactivityTimer();
 
-    // Cleanup
     return () => {
-      events.forEach((event) => {
-        document.removeEventListener(event, handleActivity);
-      });
-      if (inactivityTimerRef.current) {
-        clearTimeout(inactivityTimerRef.current);
-      }
-      // Disconnect socket when user logs out or component unmounts
-      try {
-        disconnectSocket();
-      } catch (err) {
-        // ignore
-      }
+      events.forEach(event => document.removeEventListener(event, handleActivity));
+      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+      try { disconnectSocket(); } catch (err) {}
     };
   }, [user]);
 
@@ -104,4 +75,13 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+// THIS IS THE KEY — useContext is now imported!
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
 };

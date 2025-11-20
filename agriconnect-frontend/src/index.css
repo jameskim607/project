@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Make all buttons touch-friendly */
+button, a {
+  @apply min-h-[44px] min-w-[44px];
+}
+
 :root {
 	--bg: #f7fafc;
 	--text: #1f2937;
