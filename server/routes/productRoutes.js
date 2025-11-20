@@ -44,7 +44,7 @@ router.delete("/:id", protect, authorize("farmer"), deleteProduct);
 // Get farmer's products
 router.get("/farmer/:farmerId", async (req, res) => {
   try {
-    const Product = (await import("../models/Product.js")).default;
+    const Product = (await import("../models/product.js")).default;
     const products = await Product.find({ farmerId: req.params.farmerId }).sort({
       createdAt: -1,
     });
