@@ -1,7 +1,7 @@
 // server/routes/orderRoutes.js
 
 import express from "express";
-import Order from "../models/Order.js";
+import Order from "../models/order.js";
 import Product from "../models/Product.js";
 import Notification from "../models/Notification.js";
 import { protect, authorize } from "../middleware/authMiddleware.js";
