@@ -1,9 +1,9 @@
-// server/routes/orderRoutes.js
+// server/routes/orderRoutes.js // THIS FILE IS NEW — 2025
 
 import express from "express";
 import Order from "../models/order.js";
-import Product from "../models/Product.js";
-import Notification from "../models/Notification.js";
+import Product from "../models/product.js";
+import Notification from "../models/notification.js";
 import { protect, authorize } from "../middleware/authMiddleware.js";
 import { getIO } from "../utils/socket.js";
 
