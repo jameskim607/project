@@ -8,7 +8,7 @@ Built for Kenya. Made in Kenya. For Kenyans.
 ---
 
 ## 🚀 Live Deployment  
-👉 **[Visit AgriConnect Live](https://agriconnect-git-master-james-projects-fe647a3d.vercel.app/)**
+👉 **[Visit AgriConnect Live](https://agriconnect-pi.vercel.app/)**
 
 ---
 
